@@ -3,7 +3,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE
-    IF NOT EXISTS notes (
+    IF NOT EXISTS node.notes (
         id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
         title VARCHAR(255) NOT NULL UNIQUE,
         content TEXT NOT NULL,

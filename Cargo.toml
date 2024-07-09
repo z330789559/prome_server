@@ -1,17 +1,47 @@
 [package]
-name = "rust-postgres-crud-sqlx"
+name = "promote-node"
 version = "0.1.0"
 edition = "2021"
+resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+# 使用 resolver = "2" 以启用新的依赖解析器
+
 
 [dependencies]
-actix-cors = "0.6.4"
-actix-web = "4.2.1"
+actix-cors = "0.7.0"
+actix-web = "4.8.0"
 chrono = { version = "0.4.23", features = ["serde"] }
 dotenv = "0.15.0"
-env_logger = "0.10.0"
+env_logger = "0.11.3"
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.91"
-sqlx = { version = "0.6.2", features = ["runtime-async-std-native-tls", "postgres", "uuid", "chrono"] }
+serde_derive = "1.0.0"
+sqlx = { version = "0.7.4", features = ["runtime-async-std-native-tls", "postgres", "uuid", "chrono","bigdecimal"] }
 uuid = { version = "1.2.2", features = ["serde", "v4"] }
+bigdecimal = { version = "0.4.5", features = ["serde"] }
+futures-util = "0.3.17"
+openssl = { version = "0.10", features = ["vendored"] }
+
+arrayref = "0.3.7"
+borsh = "1.5.0"
+num-derive = "0.4.2"
+num-traits = "0.2.19"
+solana-program = {version =  "2.0.1",  default-features = false  }
+spl-token = "6.0.0"
+solana-sdk = "2.0.1"
+thiserror = "1.0.60"
+hex = "0.4.3"
+ed25519-dalek = "2.1.1"
+log = "0.4.22"
+
+[patch.crates-io.aes-gcm-siv]
+git = "https://github.com/RustCrypto/AEADs"
+rev = "6105d7a5591aefa646a95d12b5e8d3f55a9214ef"
+
+[patch.crates-io.curve25519-dalek]
+git = "https://github.com/anza-xyz/curve25519-dalek.git"
+rev = "b500cdc2a920cd5bff9e2dd974d7b97349d61464"
+
+[dev-dependencies]
+rustc-hex = "2.1.0"

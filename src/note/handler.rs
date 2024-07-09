@@ -1,11 +1,11 @@
-use crate::{
-    model::NoteModel,
-    schema::{CreateNoteSchema, FilterOptions, UpdateNoteSchema},
-    AppState,
-};
-use actix_web::{delete, get, patch, post, web, HttpResponse, Responder};
+
+use actix_web::{delete, get, patch, post, web, HttpResponse, Responder, Scope};
 use chrono::prelude::*;
 use serde_json::json;
+use crate::AppState;
+use crate::note::schema::{CreateNoteSchema, UpdateNoteSchema};
+use crate::note::model::NoteModel;
+use crate::utils::FilterOptions;
 
 #[get("/healthchecker")]
 async fn health_checker_handler() -> impl Responder {
@@ -180,14 +180,13 @@ async fn delete_note_handler(
     HttpResponse::NoContent().finish()
 }
 
-pub fn config(conf: &mut web::ServiceConfig) {
-    let scope = web::scope("/api")
-        .service(health_checker_handler)
+pub fn config(api:Scope) -> Scope {
+
+  //notes
+   return api.service(health_checker_handler)
         .service(note_list_handler)
         .service(create_note_handler)
         .service(get_note_handler)
         .service(edit_note_handler)
         .service(delete_note_handler);
-
-    conf.service(scope);
 }

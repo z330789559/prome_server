@@ -1,12 +1,18 @@
-mod handler;
-mod model;
-mod schema;
+
+mod note;
+mod transaction;
+
+#[cfg(test)]
+mod test;
+mod utils;
+mod middleware;
 
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::{http::header, web, App, HttpServer};
 use dotenv::dotenv;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use crate::middleware::SignerValidator;
 
 pub struct AppState {
     db: Pool<Postgres>,
@@ -15,7 +21,7 @@ pub struct AppState {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     if std::env::var_os("RUST_LOG").is_none() {
-        std::env::set_var("RUST_LOG", "actix_web=info");
+        unsafe { std::env::set_var("RUST_LOG", "actix_web=info,promote_node=info"); }
     }
     dotenv().ok();
     env_logger::init();
@@ -50,11 +56,18 @@ async fn main() -> std::io::Result<()> {
             .supports_credentials();
         App::new()
             .app_data(web::Data::new(AppState { db: pool.clone() }))
-            .configure(handler::config)
+            .configure(config)
             .wrap(cors)
+            .wrap(SignerValidator)
             .wrap(Logger::default())
     })
     .bind(("127.0.0.1", 8000))?
     .run()
     .await
+}
+fn config(cfg: &mut web::ServiceConfig) {
+    let api =  web::scope("/api");
+    let api=  note::config(api);
+    let api = transaction::config(api);
+    cfg.service(api);
 }
