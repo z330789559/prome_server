@@ -86,7 +86,7 @@ async fn create_note_handler(
 
 #[get("/notes/{id}")]
 async fn get_note_handler(
-    path: web::Path<uuid::Uuid>,
+    path: web::Path<i32>,
     data: web::Data<AppState>,
 ) -> impl Responder {
     let note_id = path.into_inner();
@@ -112,7 +112,7 @@ async fn get_note_handler(
 
 #[patch("/notes/{id}")]
 async fn edit_note_handler(
-    path: web::Path<uuid::Uuid>,
+    path: web::Path<i32>,
     body: web::Json<UpdateNoteSchema>,
     data: web::Data<AppState>,
 ) -> impl Responder {
@@ -162,7 +162,7 @@ async fn edit_note_handler(
 
 #[delete("/notes/{id}")]
 async fn delete_note_handler(
-    path: web::Path<uuid::Uuid>,
+    path: web::Path<i32>,
     data: web::Data<AppState>,
 ) -> impl Responder {
     let note_id = path.into_inner();

@@ -20,18 +20,59 @@ async fn create_transaction(
     data: web::Data<AppState>,
 ) -> impl Responder {
 
-    if !validate_signature(&body.addr, &body.signature){
+
+    if !validate_signature(&body.address, &body.signature,body.0.clone().into()){
         return HttpResponse::BadRequest().json(json!({"status": "error","message": "Invalid signature"}));
     }
-
+/**
+*{"address":"5nvCpC9TVhd8AFJ2v7kVxNxM9rWHkyukRDir1yJjZYvH",
+"startTs":"1552443713",
+"endTs":"1552465313",
+"epvToday":"1212",
+"eChgToday":"1215",
+"egridinToday":"1212",
+"egridoutToday":"1212",
+"eDischgToday":"1212",
+"cobat":"1212",
+"socHvs":"1212",
+"sohHvs":"1212",
+"mpptPower":"1212",
+"latitude":"12032.3490E",
+"longitude":"3120.2075N",
+"signature":"66iS3TFHzW33mH11w1nT1SGG7xZHUsvmt8sQHMvQEeGL6basgDTrWZiMjdTMkfYUzshRX6d3NfH6dAvFi2U5KMef"}
+ */
     let query_result = sqlx::query_as!(
         TransactionModel,
-        "INSERT INTO transaction (addr,epv_today,e_chg_today,e_dischg_today, signature) VALUES ($1, $2, $3,$4,$5) RETURNING *",
-        body.addr,
+        "INSERT INTO transaction (addr,\
+       start_ts,\
+        end_ts,\
+        epv_today,\
+        e_chg_today,\
+        egridin_today,\
+        egridout_today,\
+        e_dischg_today,\
+        cobat,\
+        soc_hvs,\
+        soh_hvs,\
+        mppt_power,\
+        latitude,\
+        longitude,\
+         signature) VALUES ($1, $2, $3,$4, $5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *",
+         body.address,
+            body.start_ts,
+            body.end_ts,
          body.epv_today,
          body.e_chg_today,
+         body.egridin_today,
+            body.egridout_today,
          body.e_dischg_today,
-        body.signature
+            body.cobat,
+            body.soc_hvs,
+            body.soh_hvs,
+            body.mppt_power,
+            body.latitude,
+            body.longitude,
+         body.signature
     )
         .fetch_one(&data.db)
         .await;

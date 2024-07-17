@@ -1,5 +1,5 @@
 mod handler;
 mod model;
-mod schema;
+pub mod schema;
 
 pub use handler::config;

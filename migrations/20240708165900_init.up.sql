@@ -1,18 +1,13 @@
 -- Add migration script here
 
 
-CREATE TABLE
-    IF NOT EXISTS node.transaction (
-        id UUID PRIMARY KEY NOT NULL DEFAULT (uuid_generate_v4()),
-        addr VARCHAR(128) NOT NULL UNIQUE,
-        epv_today DECIMAL(10,2) DEFAULT 0.00 NOT NULL  ,
-        e_chg_today DECIMAL(10,2) DEFAULT 0.00 NOT NULL ,
-        e_dischg_today DECIMAL(10,2) DEFAULT 0.00 NOT NULL ,
-        signature VARCHAR(255) NOT NULL UNIQUE,
-        created_at TIMESTAMP
-        WITH
-            TIME ZONE DEFAULT NOW(),
-        updated_at TIMESTAMP
-        WITH
-            TIME ZONE DEFAULT NOW()
-    );
+CREATE TABLE node.transaction(
+    addr varchar(128) NOT NULL,
+    epv_today numeric(10,2) NOT NULL DEFAULT 0.00,
+    e_chg_today numeric(10,2) NOT NULL DEFAULT 0.00,
+    e_dischg_today numeric(10,2) NOT NULL DEFAULT 0.00,
+    signature varchar(255) NOT NULL,
+    created_at timestamp with time zone DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT now(),
+    id  SERIAL NOT NULL
+);

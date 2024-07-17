@@ -45,3 +45,7 @@ rev = "b500cdc2a920cd5bff9e2dd974d7b97349d61464"
 
 [dev-dependencies]
 rustc-hex = "2.1.0"
+
+[[bin]]
+name = "promote-node"
+path = "src/main.rs"

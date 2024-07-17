@@ -48,7 +48,7 @@ mod test{
         public.copy_from_slice(&public_key);
         println!("key :{:?}",buffer.as_slice());
 
-         let mut sk = Keypair::from_bytes(&buffer).unwrap();
+         // let mut sk = Keypair::from_bytes(&buffer).unwrap();
         // let pk = sk.verifying_key();
         // let vk =VerifyingKey::from_bytes(&public_key).unwrap();
         //68,65,6c,6c,6f,21,21,21
@@ -56,13 +56,13 @@ mod test{
         const sign_data: [u8; 64] =[0x90,0xe4,0xfb,0x09,0x0c,0xad,0x59,0xad,0xc8,0x31,0x87,0xad,0x30,0x0b,0x3d,0x2c,0xbd,0x86,0xd2,0xcc,0xe0,0x40,0xe5,0xe5,0x67,0xbf,0x2f,0xcb,0x32,0xf0,0xd3,0x4b,0x38,0x0e,0xeb,0xbe,0x80,0x1f,0x2d,0xfa,0x70,0xfb,0x34,0x44,0x82,0x54,0x1b,0x52,0xce,0xce,0x48,0x05,0x3e,0xf6,0x0d,0x3d,0x76,0x73,0x33,0xe4,0x1e,0xc0,0xbd,0x08];
        let signatures= Signature::from(sign_data);
 
+        let mut sk = Keypair::new();
 
-
-        let signature1=    sk.sign_message(&message);
+        let signature1=    sk.sign_message(b"hello world");
         println!("signature1: {:?}", signature1.to_string());
         println!("signatures: {:?}", signatures.to_string());
         println!("address {:?}", sk.pubkey().to_string());
-        assert!(signatures.verify(&sk.pubkey().to_bytes()[..], &message), "not ok");
+        assert!(signature1.verify(&sk.pubkey().to_bytes()[..], &message), "not ok");
       //
       //   assert!(vk.verify(b"hello world", &signatures).is_ok(),"not ok");
       //
