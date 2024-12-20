@@ -6,20 +6,44 @@ mod transaction;
 mod test;
 mod utils;
 mod middleware;
+mod server;
 
+use std::collections::HashMap;
 use std::env;
+use std::sync::Arc;
 use actix_cors::Cors;
 use actix_web::middleware::Logger;
-use actix_web::{http::header, web, App, HttpServer};
+use actix_web::{http::header, web, App,Error, HttpServer, HttpResponse, HttpRequest};
+use actix_web_actors::ws;
 use dotenv::{dotenv, from_filename};
 use log::info;
+use moka::future::Cache;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
-use crate::middleware::SignerValidator;
+use self::middleware::SignerValidator;
+use self::server::MyWebSocket;
+
+
+// WebSocket handshake and start `MyWebSocket` actor.
+async fn websocket(req: HttpRequest, stream: web::Payload, data: web::Data<AppState>) -> Result<HttpResponse, Error> {
+    println!("✅Connection to the ws a connect!");
+    ws::start(MyWebSocket::new(data), &req, stream)
+}
 
 pub struct AppState {
     db: Pool<Postgres>,
+    local_cache: LocalCache<String>,
+    redis: RedisCache,
 }
 
+#[derive(Default)]
+pub struct  LocalCache<V: AsRef<str>>{
+    db: Arc<HashMap<String, Cache<String, V>>>
+}
+
+#[derive(Clone)]
+pub struct  RedisCache{
+    db: Arc<redis::Client>,
+}
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     if std::env::var_os("RUST_LOG").is_none() {
@@ -43,6 +67,21 @@ async fn main() -> std::io::Result<()> {
             std::process::exit(1);
         }
     };
+    let redis_host = std::env::var("REDIS_HOST").expect("REDIS_HOST must be set");
+    let redis_port = std::env::var("REDIS_PORT").expect("REDIS_PORT must be set");
+    let redis_password = std::env::var("REDIS_PASSWORD");
+
+    let client =if let Ok(pass) =redis_password{
+        redis::Client::open(format!("redis://:{}@{}:{}/5", pass, redis_host, redis_port))
+        .expect("Failed to create Redis client")
+    }else{
+        redis::Client::open(format!("redis://{}:{}/5", redis_host, redis_port))
+        .expect("Failed to create Redis client")
+    };
+
+    let redis_client = RedisCache{
+        db: Arc::new(client)
+    };
 
     println!("🚀 Server started successfully");
 
@@ -57,7 +96,8 @@ async fn main() -> std::io::Result<()> {
             ])
             .supports_credentials();
         App::new()
-            .app_data(web::Data::new(AppState { db: pool.clone() }))
+            .app_data(web::Data::new(AppState { db: pool.clone(), local_cache: Default::default(), redis: redis_client.clone()}))
+            .service( web::resource("/ws").route(web::get().to(websocket)))
             .configure(config)
             .wrap(cors)
             .wrap(SignerValidator)
