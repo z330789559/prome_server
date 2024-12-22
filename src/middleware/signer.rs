@@ -1,10 +1,11 @@
 
 use actix_web::dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform};
-use actix_web::error;
+use actix_web::{error, HttpMessage};
 use futures_util::future::{LocalBoxFuture};
 use std::future::{ready, Ready};
 use actix_web::Error;
 use log::info;
+use crate::auth::{validate_token, Claims};
 
 pub struct SignerValidator;
 
@@ -43,7 +44,8 @@ impl<S, B> Service<ServiceRequest> for SignerMiddleware<S>
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        // 进行鉴权操作，判断是否有权限
+        // 不需要check authorize
+
         if need_valid_and_pass(&req) {
             // 有权限，继续执行后续中间件
             let fut = self.service.call(req);
@@ -52,7 +54,15 @@ impl<S, B> Service<ServiceRequest> for SignerMiddleware<S>
                 Ok(res)
             })
         } else {
-            // 没有权限，立即返回响应
+         let http_req = req.request();
+            if let Ok(claim) = validate_token(http_req) {
+                //add claim to req extension
+                {
+                let mut extension = http_req.extensions_mut();
+                extension.insert(claim);
+                }
+                return Box::pin(self.service.call(req));
+            }
             Box::pin(async move {
                 // 鉴权失败，返回未授权的响应，停止后续中间件的调用
                 Err(error::ErrorUnauthorized("signature valid fail"))

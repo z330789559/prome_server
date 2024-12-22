@@ -25,3 +25,4 @@ CREATE USER prome WITH PASSWORD 'prome_123456';
  
  -- 设置 search_path
  ALTER USER prome SET search_path TO node, public;
+

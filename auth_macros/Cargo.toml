@@ -1,0 +1,16 @@
+[package]
+name = "auth_macros"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = {workspace = true}
+jsonwebtoken ={workspace = true}
+serde = {workspace = true}
+quote = "1.0.36"
+syn = "2.0.87"
+
+[dependencies.proc-macro-crate]
+version = "3.2.0"
+[lib]
+proc-macro = true

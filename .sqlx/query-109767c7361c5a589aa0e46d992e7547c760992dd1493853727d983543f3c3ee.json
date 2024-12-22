@@ -1,0 +1,138 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO transaction (addr,start_ts,end_ts,epv_today,e_chg_today,egridin_today,egridout_today,e_dischg_today,cobat,soc_hvs,soh_hvs,mppt_power,latitude,longitude,signature) VALUES ($1, $2, $3,$4, $5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15) RETURNING *",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "addr",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "epv_today",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 2,
+        "name": "e_chg_today",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 3,
+        "name": "e_dischg_today",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "signature",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "created_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 6,
+        "name": "updated_at",
+        "type_info": "Timestamptz"
+      },
+      {
+        "ordinal": 7,
+        "name": "id",
+        "type_info": "Int4"
+      },
+      {
+        "ordinal": 8,
+        "name": "start_ts",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 9,
+        "name": "end_ts",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 10,
+        "name": "egridin_today",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 11,
+        "name": "egridout_today",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 12,
+        "name": "cobat",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 13,
+        "name": "soc_hvs",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 14,
+        "name": "soh_hvs",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 15,
+        "name": "mppt_power",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 16,
+        "name": "latitude",
+        "type_info": "Bpchar"
+      },
+      {
+        "ordinal": 17,
+        "name": "longitude",
+        "type_info": "Bpchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Int8",
+        "Int8",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Numeric",
+        "Bpchar",
+        "Bpchar",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "109767c7361c5a589aa0e46d992e7547c760992dd1493853727d983543f3c3ee"
+}

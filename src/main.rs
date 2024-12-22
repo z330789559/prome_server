@@ -1,12 +1,17 @@
 
 mod note;
+mod auth;
+pub(crate) use auth::{generate_token, validate_token};
 mod transaction;
 
+use auth_macros::jwt_guard;
 #[cfg(test)]
 mod test;
 mod utils;
 mod middleware;
 mod server;
+mod account;
+
 
 use std::collections::HashMap;
 use std::env;
@@ -19,8 +24,10 @@ use dotenv::{dotenv, from_filename};
 use log::info;
 use moka::future::Cache;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
+use crate::account::login_handler;
 use self::middleware::SignerValidator;
 use self::server::MyWebSocket;
+
 
 
 // WebSocket handshake and start `MyWebSocket` actor.
@@ -97,6 +104,7 @@ async fn main() -> std::io::Result<()> {
             .supports_credentials();
         App::new()
             .app_data(web::Data::new(AppState { db: pool.clone(), local_cache: Default::default(), redis: redis_client.clone()}))
+            .route("/login",  web::post().to(login_handler))
             .service( web::resource("/ws").route(web::get().to(websocket)))
             .configure(config)
             .wrap(cors)

@@ -4,9 +4,50 @@ version = "0.1.0"
 edition = "2021"
 resolver = "2"
 
+[workspace]
+members = ["auth_macros"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 # 使用 resolver = "2" 以启用新的依赖解析器
 
+[workspace.dependencies]
+actix = "0.13.5"
+actix-codec = "0.5.2"
+actix-cors = "0.7.0"
+actix-web-actors = "4.3.1"
+actix-web = "4.8.0"
+actix-files = "0.6.6"
+jsonwebtoken = "9.3.0"
+actix-rt = "2.10.0"
+chrono = { version = "0.4.23", features = ["serde"] }
+dotenv = "0.15.0"
+env_logger = "0.11.3"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.91"
+serde_derive = "1.0.0"
+sqlx = { version = "0.8.2", features = ["runtime-async-std-native-tls", "postgres", "uuid", "chrono","bigdecimal"] }
+uuid = { version = "1.2.2", features = ["serde", "v4"] }
+bigdecimal = { version = "0.4.5", features = ["serde"] }
+futures-util = { version = "0.3.7", default-features = false, features = ["std", "sink"] }
+openssl = { version = "0.10", features = ["vendored"] }
+
+arrayref = "0.3.7"
+borsh = "1.5.0"
+num-derive = "0.4.2"
+num-traits = "0.2.19"
+solana-program = {version =  "2.0.1",  default-features = false  }
+spl-token = "7.0.0"
+solana-sdk = "2.0.1"
+thiserror = "2.0.8"
+hex = "0.4.3"
+ed25519-dalek = "2.1.1"
+log = "0.4.22"
+awc = "3.5.1"
+tokio = { version = "1.41.0", features = ["full"] }
+tokio-stream = "0.1.16"
+moka = { version = "0.12.8", features = ["future"] } ## localcache
+redis = { version = "0.27.5", features = ["tokio-comp"] }
+generational-arena = {  version = "0.2.9", features = ["serde"]  }
+alloy = { version = "0.8", features = ["full"] }
 
 [dependencies]
 actix = "0.13.5"
@@ -15,6 +56,7 @@ actix-cors = "0.7.0"
 actix-web-actors = "4.3.1"
 actix-web = "4.8.0"
 actix-files = "0.6.6"
+jsonwebtoken = "9.3.0"
 actix-rt = "2.10.0"
 chrono = { version = "0.4.23", features = ["serde"] }
 dotenv = "0.15.0"
@@ -35,7 +77,7 @@ num-traits = "0.2.19"
 solana-program = {version =  "2.0.1",  default-features = false  }
 spl-token = "6.0.0"
 solana-sdk = "2.0.1"
-thiserror = "1.0.60"
+thiserror = "2.0.9"
 hex = "0.4.3"
 ed25519-dalek = "2.1.1"
 log = "0.4.22"
@@ -45,6 +87,8 @@ tokio-stream = "0.1.16"
 moka = { version = "0.12.8", features = ["future"] } ## localcache
 redis = { version = "0.27.5", features = ["tokio-comp"] }
 generational-arena = {  version = "0.2.9", features = ["serde"]  }
+alloy = { version = "0.8", features = ["full"] }
+auth_macros= { path = "auth_macros" }
 
 
 
