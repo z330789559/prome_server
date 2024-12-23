@@ -136,6 +136,4 @@ pub fn config(api: Scope) -> Scope {
         .service(crate::transaction::handler::create_transaction)
         .service(crate::transaction::handler::transaction_list_handler);
 
-
-
 }

@@ -1,9 +1,10 @@
-use actix_web::{post, web, Error, HttpResponse, Responder};
+use actix_web::{post, web, Error, HttpResponse, Responder, Scope};
 use crate::account::model::AccountModel;
 use crate::account::schema::CreateAccountSchema;
 use crate::AppState;
 
 
+#[post("/register")]
 pub  async fn create_account_handler(
     body: web::Json<CreateAccountSchema>,
     data: web::Data<AppState>,
@@ -67,4 +68,8 @@ pub  async fn login_handler(
                 .json(serde_json::json!({"status": "fail","message": format!("{:?}", e)}))
         }
     }
+}
+pub fn config(api: Scope) -> Scope {
+    //notes
+    return  api.service(create_account_handler);
 }

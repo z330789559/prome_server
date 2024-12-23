@@ -157,5 +157,6 @@ fn config(cfg: &mut web::ServiceConfig) {
     let api =  web::scope("/v1");
     let api=  note::config(api);
     let api = transaction::config(api);
+    let api = account::config(api);
     cfg.service(api);
 }
