@@ -19,9 +19,9 @@ pub  async fn create_account_handler(
         .await;
 
      match query_result {
-        Ok(note) => {
+        Ok(account) => {
             let note_response = serde_json::json!({"status": "success","data": serde_json::json!({
-                "note": note
+                "account": account
             })});
 
             HttpResponse::Ok().json(note_response)
