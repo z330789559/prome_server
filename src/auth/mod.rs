@@ -8,7 +8,6 @@ use actix_web::http::header;
 use actix_web::{Error, HttpRequest};
 
 use alloy::providers::{Provider, ProviderBuilder};
-use eyre::Result;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
