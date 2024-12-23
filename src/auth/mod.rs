@@ -1,4 +1,4 @@
-
+mod sign;
 
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
@@ -6,6 +6,9 @@ use std::env;
 use std::time::{SystemTime, UNIX_EPOCH};
 use actix_web::http::header;
 use actix_web::{Error, HttpRequest};
+
+use alloy::providers::{Provider, ProviderBuilder};
+use eyre::Result;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {

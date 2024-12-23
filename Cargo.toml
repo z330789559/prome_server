@@ -90,6 +90,10 @@ generational-arena = {  version = "0.2.9", features = ["serde"]  }
 alloy = { version = "0.8", features = ["full"] }
 auth_macros= { path = "auth_macros" }
 
+tiny-keccak = "2.0.2"
+secp256k1 = { version = "0.21", features = ["rand"] }
+ecdsa = "0.10"
+
 
 
 
